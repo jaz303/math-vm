@@ -36,7 +36,7 @@
     stack[stack_pos]
     
 #define NEXT() \
-    code++; \
+    ++code; \
     goto *jump_table[code->opcode]
     
 VALUE vm_eval(inst_t *code, VALUE *stack, size_t stack_sz) {
