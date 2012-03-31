@@ -71,7 +71,7 @@ VALUE vm_eval(inst_t *code, VALUE *stack, size_t stack_sz) {
         jump_table_init       = 1;
     }
     
-    int stack_pos = 0;
+    int stack_pos = -1;
     int stack_max = stack_sz - 1;
     
     goto *jump_table[code->opcode];
