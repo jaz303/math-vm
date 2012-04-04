@@ -4,42 +4,31 @@
 #include <stdlib.h>
 
 typedef enum opcode {
-    
-    OP_HALT,
-    
+    OP_HALT         = 0,
     OP_PUSH,
     OP_PUSH_INPUT,
-    
     OP_NEGATE,
-    
     OP_ADD,
     OP_SUB,
     OP_MUL,
     OP_DIV,
-    
     OP_COS,
     OP_SIN,
     OP_TAN,
-    
     OP_ACOS,
     OP_ASIN,
     OP_ATAN,
     OP_ATAN2,
-    
     OP_POW,
     OP_SQRT,
     OP_LOGE,
     OP_LOG10,
-    
     OP_CLAMP,
     OP_FLOOR,
     OP_CEIL,
-    
     OP_MIN2,
     OP_MAX2,
-    
     OP_OPCODE_MAX
-    
 } opcode_t;
 
 typedef float VALUE;
