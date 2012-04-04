@@ -5,6 +5,7 @@ CFLAGS	=
 	gcc -c -o $@ $<
 
 OBJS	= 	vm.o \
+			tsort.o \
 			test.o
 
 default: test
