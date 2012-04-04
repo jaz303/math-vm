@@ -15,6 +15,9 @@ static int tsort_r(graph_t *g, node_id *o, unsigned char *visited, node_id n) {
         int i, num_incoming = g->nodes[n].num_incoming;
         for (i = 0; i < num_incoming; i++) {
             int num_added = tsort_r(g, o, visited, g->nodes[n].incoming[i]);
+            if (num_added == -1) {
+                return -1;
+            }
             o += num_added;
             total_added += num_added;
         }
