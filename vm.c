@@ -39,36 +39,37 @@
     ++code; \
     goto *jump_table[code->opcode]
     
-VALUE vm_eval(inst_t *code, VALUE *stack, size_t stack_sz) {
+VALUE vm_eval(inst_t *code, VALUE *stack, size_t stack_sz, VALUE *inputs) {
     
     static int jump_table_init = 0;
     static void* jump_table[OP_OPCODE_MAX];
     
     if (!jump_table_init) {
-        jump_table[OP_PUSH]   = &&LBL_PUSH;
-        jump_table[OP_NEGATE] = &&LBL_NEGATE;
-        jump_table[OP_ADD]    = &&LBL_ADD;
-        jump_table[OP_SUB]    = &&LBL_SUB;
-        jump_table[OP_MUL]    = &&LBL_MUL;
-        jump_table[OP_DIV]    = &&LBL_DIV;
-        jump_table[OP_COS]    = &&LBL_COS;
-        jump_table[OP_SIN]    = &&LBL_SIN;
-        jump_table[OP_TAN]    = &&LBL_TAN;
-        jump_table[OP_ACOS]   = &&LBL_ACOS;
-        jump_table[OP_ASIN]   = &&LBL_ASIN;
-        jump_table[OP_ATAN]   = &&LBL_ATAN;
-        jump_table[OP_ATAN2]  = &&LBL_ATAN2;
-        jump_table[OP_POW]    = &&LBL_POW;
-        jump_table[OP_SQRT]   = &&LBL_SQRT;
-        jump_table[OP_LOGE]   = &&LBL_LOGE;
-        jump_table[OP_LOG10]  = &&LBL_LOG10;
-        jump_table[OP_CLAMP]  = &&LBL_CLAMP;
-        jump_table[OP_FLOOR]  = &&LBL_FLOOR;
-        jump_table[OP_CEIL]   = &&LBL_CEIL;
-        jump_table[OP_MIN2]   = &&LBL_MIN2;
-        jump_table[OP_MAX2]   = &&LBL_MAX2;
-        jump_table[OP_HALT]   = &&LBL_HALT;
-        jump_table_init       = 1;
+        jump_table[OP_PUSH]         = &&LBL_PUSH;
+        jump_table[OP_PUSH_INPUT]   = &&LBL_PUSH_INPUT;
+        jump_table[OP_NEGATE]       = &&LBL_NEGATE;
+        jump_table[OP_ADD]          = &&LBL_ADD;
+        jump_table[OP_SUB]          = &&LBL_SUB;
+        jump_table[OP_MUL]          = &&LBL_MUL;
+        jump_table[OP_DIV]          = &&LBL_DIV;
+        jump_table[OP_COS]          = &&LBL_COS;
+        jump_table[OP_SIN]          = &&LBL_SIN;
+        jump_table[OP_TAN]          = &&LBL_TAN;
+        jump_table[OP_ACOS]         = &&LBL_ACOS;
+        jump_table[OP_ASIN]         = &&LBL_ASIN;
+        jump_table[OP_ATAN]         = &&LBL_ATAN;
+        jump_table[OP_ATAN2]        = &&LBL_ATAN2;
+        jump_table[OP_POW]          = &&LBL_POW;
+        jump_table[OP_SQRT]         = &&LBL_SQRT;
+        jump_table[OP_LOGE]         = &&LBL_LOGE;
+        jump_table[OP_LOG10]        = &&LBL_LOG10;
+        jump_table[OP_CLAMP]        = &&LBL_CLAMP;
+        jump_table[OP_FLOOR]        = &&LBL_FLOOR;
+        jump_table[OP_CEIL]         = &&LBL_CEIL;
+        jump_table[OP_MIN2]         = &&LBL_MIN2;
+        jump_table[OP_MAX2]         = &&LBL_MAX2;
+        jump_table[OP_HALT]         = &&LBL_HALT;
+        jump_table_init             = 1;
     }
     
     int stack_pos = -1;
@@ -78,7 +79,12 @@ VALUE vm_eval(inst_t *code, VALUE *stack, size_t stack_sz) {
     
     LBL_PUSH:
     {
-        PUSH(code->value);
+        PUSH(code->operand.value);
+        NEXT();
+    }
+    LBL_PUSH_INPUT:
+    {
+        PUSH(inputs[code->operand.input_register]);
         NEXT();
     }
     LBL_NEGATE:

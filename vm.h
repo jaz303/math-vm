@@ -8,6 +8,7 @@ typedef enum opcode {
     OP_HALT,
     
     OP_PUSH,
+    OP_PUSH_INPUT,
     
     OP_NEGATE,
     
@@ -47,7 +48,10 @@ typedef float VALUE;
 // sizeof(inst_t) should be 4 or 8 bytes, depending on precision
 typedef struct {
     char        opcode;
-    VALUE       value;
+    union {
+        VALUE   value;
+        int     input_register;
+    } operand;
 } inst_t;
 
 /**
@@ -57,7 +61,8 @@ typedef struct {
  *             must be non-empty and terminated with OP_HALT
  * @param stack stack to be used for evaluation
  * @param stack_sz number of VALUEs the stack can hold
+ * @param inputs array of input values
  */
-VALUE vm_eval(inst_t *code, VALUE *stack, size_t stack_sz);
+VALUE vm_eval(inst_t *code, VALUE *stack, size_t stack_sz, VALUE *inputs);
 
 #endif
