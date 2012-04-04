@@ -5,12 +5,12 @@
 #define VISITED_FROM_CURRENT_ENDPOINT   2
 
 static int tsort_r(graph_t *g, node_id *o, unsigned char *visited, node_id n) {
-    int total_added = 0;
     if (visited[n] == VISITED_PREVIOUSLY) {
-        return 0; /* node was already visited from a different endpoint */
+        return 0;
     } else if (visited[n] == VISITED_FROM_CURRENT_ENDPOINT) {
         return -1; /* cycle! */
     } else {
+        int total_added = 0;
         visited[n] = VISITED_FROM_CURRENT_ENDPOINT;
         int i, num_incoming = g->nodes[n].num_incoming;
         for (i = 0; i < num_incoming; i++) {
@@ -19,10 +19,8 @@ static int tsort_r(graph_t *g, node_id *o, unsigned char *visited, node_id n) {
             total_added += num_added;
         }
         *o = n;
-        ++total_added;
+        return total_added + 1;
     }
-    
-    return total_added;
 }
 
 int tsort(graph_t *g, node_id *o) {
